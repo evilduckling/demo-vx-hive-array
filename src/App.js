@@ -5,10 +5,8 @@ import { Group } from "@vx/group";
 import "./App.css";
 
 const graphWidth = 1200;
-const hostPerLine = 10;
+const hostPerLine = 15;
 const padding = graphWidth / (hostPerLine + 1) / 2;
-const lineThickness = 8;
-const fontSize = 22;
 const hexaWidth = (graphWidth - padding * 2) / hostPerLine;
 
 // Constants needed to draw an hexagone.
@@ -16,6 +14,9 @@ const halfHexaWidth = hexaWidth / 2;
 const hexaRadius = hexaWidth / Math.sqrt(3);
 const halfHexaRadius = hexaRadius / 2;
 const vDedalsPerLine = hexaRadius + halfHexaRadius;
+
+const fontSize = Math.round(hexaRadius / 2.5);
+const lineThickness = Math.round(hexaRadius / 7);
 
 class App extends Component {
   state = { data: new Array(23).fill(10) };
