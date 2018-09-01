@@ -114,39 +114,36 @@ class App extends Component {
   };
 
   evolveData = () => {
-    const { data } = this.state;
-
-    this.setState({
-      data: data.map(element => {
-        let v = Math.round(Math.random() * 20) - 13;
-        if (Math.round(Math.random() * 30) === 30) {
-          v = 100;
-        }
-        let load = Math.min(Math.max(element.load + v, 0), 100);
-        return { ...element, load };
-      })
+    this.setState(previousState => {
+      return {
+        data: previousState.data.map(element => {
+          let v = Math.round(Math.random() * 20) - 13;
+          if (Math.round(Math.random() * 30) === 30) {
+            v = 100;
+          }
+          let load = Math.min(Math.max(element.load + v, 0), 100);
+          return { ...element, load };
+        })
+      };
     });
   };
 
   mouseOver = index => {
-    const { data } = this.state;
-    this.setState({
-      data: data.map((element, i) => {
-        if (i === index) {
-          return { ...element, highlighted: true };
-        } else {
-          return { ...element, highlighted: false };
-        }
-      })
+    this.setState(previousState => {
+      previousState.data[index].highlighted = true;
+      return {
+        data: previousState.data
+      };
     });
   };
 
   mouseOut = () => {
-    const { data } = this.state;
-    this.setState({
-      data: data.map(element => {
-        return { ...element, highlighted: false };
-      })
+    this.setState(previousState => {
+      return {
+        data: previousState.data.map(element => {
+          return { ...element, highlighted: false };
+        })
+      };
     });
   };
 
