@@ -22,13 +22,12 @@ class App extends Component {
   state = { data: new Array(37).fill({ load: 20, highlighted: false }) };
 
   componentDidMount() {
-    this.looper();
+    this.timerID = setInterval(this.evolveData, 2000);
   }
 
-  looper = () => {
-    this.evolveData();
-    setTimeout(this.looper, 2000);
-  };
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
 
   addHost = () => {
     const { data } = this.state;
@@ -114,7 +113,7 @@ class App extends Component {
     }
   };
 
-  evolveData() {
+  evolveData = () => {
     const { data } = this.state;
 
     this.setState({
@@ -127,7 +126,7 @@ class App extends Component {
         return { ...element, load };
       })
     });
-  }
+  };
 
   mouseOver = index => {
     const { data } = this.state;
