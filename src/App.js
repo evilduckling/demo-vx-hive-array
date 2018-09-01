@@ -5,7 +5,7 @@ import { Group } from "@vx/group";
 import "./App.css";
 
 const graphWidth = 1200;
-const hostPerLine = 15;
+const hostPerLine = 12;
 const padding = graphWidth / (hostPerLine + 1) / 2;
 const hexaWidth = (graphWidth - padding * 2) / hostPerLine;
 
@@ -19,7 +19,7 @@ const fontSize = Math.round(hexaRadius / 2.5);
 const lineThickness = Math.round(hexaRadius / 7);
 
 class App extends Component {
-  state = { data: new Array(23).fill(10) };
+  state = { data: new Array(37).fill({ load: 20, highlighted: false }) };
 
   componentDidMount() {
     this.looper();
@@ -32,7 +32,7 @@ class App extends Component {
 
   addHost = () => {
     const { data } = this.state;
-    data.push(0);
+    data.push({ load: 20, highlighted: false });
     this.setState({ data: data });
   };
 
@@ -43,7 +43,7 @@ class App extends Component {
   };
 
   shape = () => {
-    const path = [
+    let path = [
       { x: 0, y: halfHexaRadius },
       { x: halfHexaWidth, y: 0 },
       { x: hexaWidth, y: halfHexaRadius },
@@ -60,7 +60,7 @@ class App extends Component {
   /**
    * Get the x position of the upper left corner of the square including the hexagone to draw.
    */
-  getXPosition = (d, i) => {
+  getXPosition = i => {
     let decal = 0;
     if (this.getLineNumber(i) % 2 === 0) {
       // Odd lines
@@ -72,7 +72,7 @@ class App extends Component {
   /**
    * Get the y position of the upper left corner of the square including the hexagone to draw.
    */
-  getYPosition = (d, i) => {
+  getYPosition = i => {
     return padding + this.getLineNumber(i) * vDedalsPerLine;
   };
 
@@ -106,18 +106,50 @@ class App extends Component {
     return index;
   };
 
-  formatValue = d => d + " %";
+  formatValue = element => {
+    if (element.highlighted) {
+      return element.load;
+    } else {
+      return element.load + " %";
+    }
+  };
 
   evolveData() {
     const { data } = this.state;
 
     this.setState({
-      data: data.map((element, index) => {
-        let v = Math.round(Math.random() * 20) - 10;
-        return Math.min(Math.max(element + v, 0), 100);
+      data: data.map(element => {
+        let v = Math.round(Math.random() * 20) - 13;
+        if (Math.round(Math.random() * 30) === 30) {
+          v = 100;
+        }
+        let load = Math.min(Math.max(element.load + v, 0), 100);
+        return { ...element, load };
       })
     });
   }
+
+  mouseOver = index => {
+    const { data } = this.state;
+    this.setState({
+      data: data.map((element, i) => {
+        if (i === index) {
+          return { ...element, highlighted: true };
+        } else {
+          return { ...element, highlighted: false };
+        }
+      })
+    });
+  };
+
+  mouseOut = () => {
+    const { data } = this.state;
+    this.setState({
+      data: data.map(element => {
+        return { ...element, highlighted: false };
+      })
+    });
+  };
 
   render() {
     const { data } = this.state;
@@ -130,6 +162,8 @@ class App extends Component {
       range: ["#6ED071", "#D09902", "#D45D01", "#A1292E"],
       domain: [0, 33, 66, 100]
     });
+
+    const shapeString = this.shape().str;
 
     return (
       <div>
@@ -148,23 +182,25 @@ class App extends Component {
             fill={`url(#teal)`}
             rx={20}
           />
-          {data.map((d, i) => {
+          {data.map((element, i) => {
             return (
               <Group
                 key={i}
                 transform={
                   "translate(" +
-                  this.getXPosition(d, i) +
+                  this.getXPosition(i) +
                   "," +
-                  this.getYPosition(d, i) +
+                  this.getYPosition(i) +
                   ")"
                 }
+                onMouseOver={() => this.mouseOver(i)}
+                onMouseOut={this.mouseOut}
               >
                 <polygon
-                  points={this.shape().str}
+                  points={shapeString}
                   stroke="black"
                   strokeWidth={lineThickness}
-                  fill={colorScale(d)}
+                  fill={colorScale(element.load)}
                 />
                 <text
                   x={halfHexaWidth}
@@ -172,11 +208,11 @@ class App extends Component {
                   textAnchor="middle"
                   alignmentBaseline="central"
                   fill="white"
-                  fontSize={fontSize}
+                  fontSize={element.highlighted ? fontSize * 2 : fontSize}
                   fontWeight="bold"
                   fontFamily="Lucida Grande"
                 >
-                  {this.formatValue(d)}
+                  {this.formatValue(element)}
                 </text>
               </Group>
             );
