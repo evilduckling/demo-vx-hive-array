@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { GradientPinkBlue } from "@vx/gradient";
-import { scaleLinear } from "@vx/scale";
-import { Group } from "@vx/group";
-import "./App.css";
+import React, { Component } from 'react';
+import { scaleLinear } from '@vx/scale';
+import { Group } from '@vx/group';
+
+import './App.css';
 
 const graphWidth = 1200;
 const hostPerLine = 12;
@@ -51,8 +51,8 @@ class App extends Component {
       { x: 0, y: hexaRadius + halfHexaRadius }
     ];
     path.str = path.reduce((acc, element) => {
-      return acc + " " + element.x + "," + element.y;
-    }, "");
+      return acc + ' ' + element.x + ',' + element.y;
+    }, '');
     return path;
   };
 
@@ -109,7 +109,7 @@ class App extends Component {
     if (element.highlighted) {
       return element.load;
     } else {
-      return element.load + " %";
+      return element.load + ' %';
     }
   };
 
@@ -155,7 +155,7 @@ class App extends Component {
       hexaRadius * 2 + vDedalsPerLine * (countLine - 1) + 2 * padding;
 
     const colorScale = scaleLinear({
-      range: ["#6ED071", "#D09902", "#D45D01", "#A1292E"],
+      range: ['#6ED071', '#D09902', '#D45D01', '#A1292E'],
       domain: [0, 33, 66, 100]
     });
 
@@ -164,30 +164,20 @@ class App extends Component {
     return (
       <div>
         <div>
-          <h1>Host map !</h1>
-          <button onClick={this.addHost}>Add host!</button>
-          <button onClick={this.removeHost}>Remove host !</button>
+          <button onClick={this.addHost}>More data!</button>
+          <button onClick={this.removeHost}>Less data!</button>
         </div>
         <svg width={graphWidth} height={graphHeight}>
-          <GradientPinkBlue id="teal" />
-          <rect
-            x={0}
-            y={0}
-            width={graphWidth}
-            height={graphHeight}
-            fill={`url(#teal)`}
-            rx={20}
-          />
           {data.map((element, i) => {
             return (
               <Group
                 key={i}
                 transform={
-                  "translate(" +
+                  'translate(' +
                   this.getXPosition(i) +
-                  "," +
+                  ',' +
                   this.getYPosition(i) +
-                  ")"
+                  ')'
                 }
                 onMouseOver={() => this.mouseOver(i)}
                 onMouseOut={this.mouseOut}

@@ -1,9 +1,8 @@
 {
-  "name": "vx-hive",
+  "name": "demo-vx-hive-array",
   "version": "0.1.0",
-  "private": true,
+  "description": "Display an arbitrary array of integer as a hive using react D3 with VX",
   "dependencies": {
-    "@vx/gradient": "0.0.165",
     "@vx/group": "0.0.170",
     "@vx/scale": "0.0.165",
     "@vx/shape": "0.0.171",
