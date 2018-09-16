@@ -5,9 +5,9 @@ import { Group } from '@vx/group';
 import './App.css';
 
 const graphWidth = 1200;
-const hostPerLine = 12;
-const padding = graphWidth / (hostPerLine + 1) / 2;
-const hexaWidth = (graphWidth - padding * 2) / hostPerLine;
+const valuePerLine = 12;
+const padding = graphWidth / (valuePerLine + 1) / 2;
+const hexaWidth = (graphWidth - padding * 2) / valuePerLine;
 
 // Constants needed to draw an hexagone.
 const halfHexaWidth = hexaWidth / 2;
@@ -29,13 +29,13 @@ class App extends Component {
     clearInterval(this.timerID);
   }
 
-  addHost = () => {
+  addValue = () => {
     const { data } = this.state;
     data.push({ load: 20, highlighted: false });
     this.setState({ data: data });
   };
 
-  removeHost = () => {
+  removeValue = () => {
     const { data } = this.state;
     data.pop();
     this.setState({ data });
@@ -81,9 +81,9 @@ class App extends Component {
     let even = true;
     while (index >= 0) {
       if (even) {
-        index -= hostPerLine - 1;
+        index -= valuePerLine - 1;
       } else {
-        index -= hostPerLine;
+        index -= valuePerLine;
       }
       line++;
       even = !even;
@@ -92,14 +92,14 @@ class App extends Component {
   };
   getPositionOnLine = index => {
     let even = true;
-    let limit = hostPerLine - 1;
+    let limit = valuePerLine - 1;
     while (index >= limit) {
       index -= limit;
       even = !even;
       if (even) {
-        limit = hostPerLine - 1;
+        limit = valuePerLine - 1;
       } else {
-        limit = hostPerLine;
+        limit = valuePerLine;
       }
     }
     return index;
@@ -164,8 +164,8 @@ class App extends Component {
     return (
       <div>
         <div>
-          <button onClick={this.addHost}>More data!</button>
-          <button onClick={this.removeHost}>Less data!</button>
+          <button onClick={this.addValue}>More data!</button>
+          <button onClick={this.removeValue}>Less data!</button>
         </div>
         <svg width={graphWidth} height={graphHeight}>
           {data.map((element, i) => {
